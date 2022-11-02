@@ -71,6 +71,31 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tvUpcoming"
+        android:text="UPCOMING EXERCISE: "
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvUpcomingExerciseName"
+        app:layout_constraintTop_toBottomOf="@id/flProgressBar"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvUpcomingExerciseName"
+        tools:text="Push up"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvUpcoming"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ImageView
         android:id="@+id/ivImage"
         android:scaleType="fitXY"
