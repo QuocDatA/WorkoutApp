@@ -9,6 +9,8 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.quocdat.workoutapp.adapter.ExerciseStatusAdapter
 import com.quocdat.workoutapp.databinding.ActivityExcerciseBinding
 import com.quocdat.workoutapp.models.ExerciseModel
 import com.quocdat.workoutapp.utils.Constants
@@ -31,6 +33,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
+    private var exerciseAdapter: ExerciseStatusAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExcerciseBinding.inflate(layoutInflater)
@@ -51,6 +55,12 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         exerciseList = Constants.defaultExerciseList()
 
         setRestView()
+        setupExerciseStatusRecyclerView()
+    }
+
+    private fun setupExerciseStatusRecyclerView(){
+        exerciseAdapter = ExerciseStatusAdapter(exerciseList!!)
+        binding?.rvListExercise?.adapter = exerciseAdapter
     }
 
     private fun setExerciseView(){
@@ -87,6 +97,11 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
+
+                exerciseList!![currentPositionExercise].setIsSelected(false)
+                exerciseList!![currentPositionExercise].setIsCompleted(true)
+                exerciseAdapter!!.notifyDataSetChanged()
+
                 if (currentPositionExercise < exerciseList!!.size - 1){
                     setRestView()
                 }else{
@@ -143,6 +158,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     "Here now we will start the exercise",
                     Toast.LENGTH_LONG).show()
                 currentPositionExercise++
+                exerciseList!![currentPositionExercise].setIsSelected(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 setExerciseView()
             }
 
