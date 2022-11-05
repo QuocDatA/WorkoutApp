@@ -1,5 +1,6 @@
 package com.quocdat.workoutapp
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.quocdat.workoutapp.adapter.ExerciseStatusAdapter
 import com.quocdat.workoutapp.databinding.ActivityExcerciseBinding
+import com.quocdat.workoutapp.databinding.DialogCustomBackConfirmationBinding
 import com.quocdat.workoutapp.models.ExerciseModel
 import com.quocdat.workoutapp.utils.Constants
 import java.util.*
@@ -51,7 +53,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         binding?.toolbarExercise?.setNavigationOnClickListener {
-            onBackPressed()
+            customDialogBackConfirmation()
         }
 
         tts = TextToSpeech(this, this)
@@ -60,6 +62,25 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         setRestView()
         setupExerciseStatusRecyclerView()
+    }
+
+    override fun onBackPressed() {
+        customDialogBackConfirmation()
+    }
+
+    private fun customDialogBackConfirmation(){
+        val customDialog = Dialog(this)
+        var dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+        dialogBinding.btnYes.setOnClickListener {
+            this@ExerciseActivity.finish()
+            customDialog.dismiss()
+        }
+        dialogBinding.btnNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
     }
 
     private fun setupExerciseStatusRecyclerView(){
