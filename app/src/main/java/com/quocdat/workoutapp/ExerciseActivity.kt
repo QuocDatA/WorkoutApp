@@ -1,5 +1,6 @@
 package com.quocdat.workoutapp
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,9 @@ import kotlin.collections.ArrayList
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var binding: ActivityExcerciseBinding? = null
+
+    private var restTimerDuration: Long = 1
+    private var exerciseTimerDuration: Long = 1
 
     private var restTimer: CountDownTimer? = null
     private var restProgress = 0
@@ -89,7 +93,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setExerciseProgressBar(){
         binding?.progressBarExercise?.progress = restProgressExercise
 
-        restTimerExercise = object : CountDownTimer(3000, 1000){
+        restTimerExercise = object : CountDownTimer(exerciseTimerDuration * 1000, 1000){
             override fun onTick(p0: Long) {
                 restProgressExercise++
                 binding?.progressBarExercise?.progress = 30 - restProgressExercise
@@ -98,16 +102,14 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             override fun onFinish() {
 
-                exerciseList!![currentPositionExercise].setIsSelected(false)
-                exerciseList!![currentPositionExercise].setIsCompleted(true)
-                exerciseAdapter!!.notifyDataSetChanged()
-
                 if (currentPositionExercise < exerciseList!!.size - 1){
+                    exerciseList!![currentPositionExercise].setIsSelected(false)
+                    exerciseList!![currentPositionExercise].setIsCompleted(true)
+                    exerciseAdapter!!.notifyDataSetChanged()
                     setRestView()
                 }else{
-                    Toast.makeText(this@ExerciseActivity,
-                        "Congratulation! You have completed the 7 minutes workout",
-                        Toast.LENGTH_LONG).show()
+                    finish()
+                    startActivity(Intent(this@ExerciseActivity, FinishActivity::class.java))
                 }
             }
 
@@ -146,7 +148,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setRestProgressBar(){
         binding?.progressBar?.progress = restProgress
 
-        restTimer = object : CountDownTimer(3000, 1000){
+        restTimer = object : CountDownTimer(restTimerDuration * 1000, 1000){
             override fun onTick(p0: Long) {
                 restProgress++
                 binding?.progressBar?.progress = 10 - restProgress
